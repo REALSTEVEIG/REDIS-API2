@@ -36,28 +36,28 @@ function getAllUsers() {
 }
 app.use("/get-users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
-    let isCahed;
+    let isCached;
     try {
         const data = yield isDataModified();
         if (data === true) {
             result = yield getAllUsers();
-            isCahed = false;
+            isCached = false;
             yield connect_1.client.set("all_users", JSON.stringify(result));
         }
         else {
-            const isCahedInRedis = yield connect_1.client.get("all_users");
-            if (isCahedInRedis) {
-                isCahed = true;
-                result = JSON.parse(isCahedInRedis);
+            const isCachedInRedis = yield connect_1.client.get("all_users");
+            if (isCachedInRedis) {
+                isCached = true;
+                result = JSON.parse(isCachedInRedis);
             }
             else {
                 result = yield getAllUsers();
-                isCahed = false;
+                isCached = false;
                 yield connect_1.client.set("all_users", JSON.stringify(result));
             }
         }
         return res.status(200).json({
-            isCahed,
+            isCached,
             result: result
         });
     }
