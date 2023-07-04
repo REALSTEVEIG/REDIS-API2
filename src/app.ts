@@ -26,7 +26,7 @@ async function getAllUsers () {
 app.use("/get-users", async (req : Request, res : Response) => {
 
     let result;
-    let isCahed;
+    let isCached;
 
     try {
 
@@ -34,23 +34,23 @@ app.use("/get-users", async (req : Request, res : Response) => {
 
         if (data === true) {
             result = await getAllUsers()
-            isCahed = false
+            isCached = false
             await client.set("all_users", JSON.stringify(result))
         } 
 
         else {
 
-            const isCahedInRedis = await client.get("all_users");
+            const isCachedInRedis = await client.get("all_users");
 
-            if (isCahedInRedis) {
+            if (isCachedInRedis) {
 
-                isCahed = true
-                result = JSON.parse(isCahedInRedis)
+                isCached = true
+                result = JSON.parse(isCachedInRedis)
             }
 
            else {
                 result = await getAllUsers()
-                isCahed = false
+                isCached = false
 
                 await client.set("all_users", JSON.stringify(result))
            }
@@ -58,7 +58,7 @@ app.use("/get-users", async (req : Request, res : Response) => {
         }
 
         return res.status(200).json({
-            isCahed,
+            isCached,
             result : result
         })
     } catch (error) {
